@@ -1,3 +1,4 @@
+from re import X
 import pandas 
 import os 
 import scipy 
@@ -9,22 +10,15 @@ from sklearn import preprocessing
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import f1_score, accuracy_score
 #uplouading dataset 
-df = pandas.read_csv('dataset/ML_MED_Dataset_train.csv')
-df = pandas.read_csv('dataset/ML_MED_KFold.csv')
-X_train = df.iloc[:,0:46]
-y_train = df.iloc[:,46:51]
-X_kf = df.iloc[:,0:46]
-y_kf = df.iloc[:,46:51]
-df = pandas.read_csv('dataset/ML_MED_Dataset_validation.csv')
-X_validation = df.iloc[:,0:46]
-y_validation = df.iloc[:,46:51]
-#normalizing set 
-scaler_x_kf = preprocessing.StandardScaler().fit(X_kf)
-scaler_x_train = preprocessing.StandardScaler().fit(X_train)
-scaler_x_validation = preprocessing.StandardScaler().fit(X_validation)
-X_kf = scaler_x_kf.transform(X_kf)
-X_validation = scaler_x_validation.transform(X_validation)
-X_train = scaler_x_train.transform(X_train)
+df = pandas.read_csv('preprocessed_dataset/ML_MED_Dataset_train_preprocessed.csv')
+X_train = df.iloc[:,1:17]
+y_train = df.iloc[:,17:21]
+df = pandas.read_csv('preprocessed_dataset/ML_MED_KFold_preprocessed.csv')
+X_kf = df.iloc[:,1:17]
+y_kf = df.iloc[:,17:21]
+df = pandas.read_csv('preprocessed_dataset/ML_MED_Dataset_validation_preprocessed.csv')
+X_validation = df.iloc[:,1:17]
+y_validation = df.iloc[:,17:21]
 #training and hyperparamater tuning _____________
 rf = RandomForestClassifier()
 distribution_params = {'n_estimators':scipy.stats.poisson(loc=200, mu=75), 'criterion':['gini','entropy','log_loss'],'min_samples_split':scipy.stats.poisson(loc=10, mu=25),'max_features':['sqrt','log2']}
